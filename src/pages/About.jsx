@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import xLogo from '../assets/logos/x.svg';
+import githubLogo from '../assets/logos/github.svg';
 
 const About = () => {
   const { t } = useTranslation();
@@ -27,7 +29,7 @@ const About = () => {
         <h3 style={{ fontSize: 14, color: 'var(--tg-theme-hint-color)', marginLeft: 8, marginBottom: 8 }}>{t('developerInfo') || 'Developer Info'}</h3>
         <div className="tg-card flex-col gap-3" style={{ padding: '8px 16px' }}>
           <a href="https://x.com/Cheese_Ghostfox" target="_blank" rel="noreferrer" className="flex-row items-center gap-3" style={{ padding: '12px 0', borderBottom: '1px solid var(--tg-border-color)', textDecoration: 'none', color: 'var(--tg-theme-text-color)' }}>
-            <img src="/src/assets/logos/x.svg" alt="X" className="icon-invert" style={{ width: 24, height: 24 }} />
+            <img src={xLogo} alt="X" className="icon-invert" style={{ width: 24, height: 24 }} />
             <div className="flex-col flex-1">
               <span className="text-bold">X (Twitter)</span>
               <span className="text-hint" style={{ fontSize: 13 }}>@Cheese_Ghostfox</span>
@@ -43,7 +45,7 @@ const About = () => {
           </a>
 
           <a href="https://github.com/CheeseGhostfox/NekoList" target="_blank" rel="noreferrer" className="flex-row items-center gap-3" style={{ padding: '12px 0', textDecoration: 'none', color: 'var(--tg-theme-text-color)' }}>
-            <img src="/src/assets/logos/github.svg" alt="GitHub" className="icon-invert" style={{ width: 24, height: 24 }} />
+            <img src={githubLogo} alt="GitHub" className="icon-invert" style={{ width: 24, height: 24 }} />
             <div className="flex-col flex-1">
               <span className="text-bold">GitHub</span>
               <span className="text-hint" style={{ fontSize: 13 }}>CheeseGhostfox/NekoList</span>

@@ -5,21 +5,27 @@ import NetworkLogo from '../components/NetworkLogo';
 import { Copy, Check, Share2, Trash2, ArrowLeft, MoreHorizontal, ExternalLink } from 'lucide-react';
 import { generatePushCard } from '../utils/pushCardEngine';
 import { useTranslation } from 'react-i18next';
+import telegramLogo from '../assets/logos/telegram.svg';
+import xLogo from '../assets/logos/x.svg';
+import discordLogo from '../assets/logos/discord.svg';
+import elementLogo from '../assets/logos/element.svg';
+import binanceLogo from '../assets/logos/binance.png';
+import bitgetLogo from '../assets/logos/bitget.png';
 
 // Utility to get the right icon for social links
 const getSocialIcon = (url) => {
   const lowerUrl = url.toLowerCase();
   if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram')) {
-    return <img src="/src/assets/logos/telegram.svg" alt="Telegram" style={{ width: 24, height: 24 }} />;
+    return <img src={telegramLogo} alt="Telegram" style={{ width: 24, height: 24 }} />;
   }
   if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) {
-    return <img src="/src/assets/logos/x.svg" alt="X" className="icon-invert" style={{ width: 24, height: 24 }} />;
+    return <img src={xLogo} alt="X" className="icon-invert" style={{ width: 24, height: 24 }} />;
   }
   if (lowerUrl.includes('discord')) {
-    return <img src="/src/assets/logos/discord.svg" alt="Discord" style={{ width: 24, height: 24 }} />;
+    return <img src={discordLogo} alt="Discord" style={{ width: 24, height: 24 }} />;
   }
   if (lowerUrl.includes('element')) {
-    return <img src="/src/assets/logos/element.svg" alt="Element" style={{ width: 24, height: 24 }} />;
+    return <img src={elementLogo} alt="Element" style={{ width: 24, height: 24 }} />;
   }
   return <ExternalLink size={24} color="var(--tg-theme-hint-color)" />;
 };
@@ -145,9 +151,9 @@ const ContactDetail = () => {
                 {contact.exchanges.map((exch, idx) => (
                   <div key={idx} className="flex-row items-center gap-3" style={{ padding: '8px 0' }} onClick={() => handleCopy(exch.uid, `exch-${idx}`)}>
                     {exch.platform === 'Binance' ? (
-                      <img src="/src/assets/logos/binance.png" alt="Binance" style={{ width: 24, height: 24 }} />
+                      <img src={binanceLogo} alt="Binance" style={{ width: 24, height: 24 }} />
                     ) : (
-                      <img src="/src/assets/logos/bitget.png" alt="Bitget" style={{ width: 24, height: 24 }} />
+                      <img src={bitgetLogo} alt="Bitget" style={{ width: 24, height: 24 }} />
                     )}
                     <div className="flex-col flex-1" style={{ overflow: 'hidden' }}>
                       <span className="text-bold">{exch.platform}</span>

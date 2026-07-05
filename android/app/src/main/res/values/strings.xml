@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">CryptoAddressBook</string>
-    <string name="title_activity_main">CryptoAddressBook</string>
-    <string name="package_name">com.example.cryptoaddressbook</string>
-    <string name="custom_url_scheme">com.example.cryptoaddressbook</string>
+    <string name="app_name">NekoList</string>
+    <string name="title_activity_main">NekoList</string>
+    <string name="package_name">com.cheeseghostfox.nekolist</string>
+    <string name="custom_url_scheme">com.cheeseghostfox.nekolist</string>
 </resources>
