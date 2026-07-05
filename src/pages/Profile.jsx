@@ -5,6 +5,9 @@ import NetworkLogo from '../components/NetworkLogo';
 import { Copy, Check, Share2, MoreHorizontal, ExternalLink, Settings } from 'lucide-react';
 import { generatePushCard } from '../utils/pushCardEngine';
 import { useTranslation } from 'react-i18next';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import telegramLogo from '../assets/logos/telegram.svg';
 import xLogo from '../assets/logos/x.svg';
 import discordLogo from '../assets/logos/discord.svg';
@@ -61,10 +64,28 @@ const Profile = () => {
     try {
       const dataUrl = await generatePushCard(contact);
       
-      const link = document.createElement('a');
-      link.download = `My_PushCard_${contact.name}.jpg`;
-      link.href = dataUrl;
-      link.click();
+      if (Capacitor.isNativePlatform()) {
+        const base64Data = dataUrl.split(',')[1];
+        const fileName = `PushCard_${contact.name}_${Date.now()}.jpg`;
+        
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Cache
+        });
+        
+        await Share.share({
+          title: `PushCard - ${contact.name}`,
+          text: `Check out ${contact.name}'s NekoList PushCard!`,
+          url: savedFile.uri,
+          dialogTitle: 'Share PushCard'
+        });
+      } else {
+        const link = document.createElement('a');
+        link.download = `My_PushCard_${contact.name}.jpg`;
+        link.href = dataUrl;
+        link.click();
+      }
     } catch (e) {
       console.error(e);
       alert('Failed to generate PushCard');
