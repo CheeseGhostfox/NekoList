@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContacts } from '../hooks/useContacts';
 import NetworkLogo from '../components/NetworkLogo';
-import { Copy, Check, Share2, MoreHorizontal, ExternalLink, Settings } from 'lucide-react';
+import { Copy, Check, Share2, MoreHorizontal, ExternalLink, Settings, Download } from 'lucide-react';
 import { generatePushCard } from '../utils/pushCardEngine';
 import { useTranslation } from 'react-i18next';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { Media } from '@capacitor-community/media';
 import telegramLogo from '../assets/logos/telegram.svg';
 import xLogo from '../assets/logos/x.svg';
 import discordLogo from '../assets/logos/discord.svg';
@@ -92,6 +93,25 @@ const Profile = () => {
     }
   };
 
+  const handleSaveToGallery = async () => {
+    try {
+      const dataUrl = await generatePushCard(contact);
+      
+      if (Capacitor.isNativePlatform()) {
+        await Media.savePhoto({ path: dataUrl });
+        alert(t('save') + ' OK!');
+      } else {
+        const link = document.createElement('a');
+        link.download = `PushCard_${contact.name}.jpg`;
+        link.href = dataUrl;
+        link.click();
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save PushCard');
+    }
+  };
+
   return (
     <div className="page-transition">
       <header className="app-header">
@@ -124,10 +144,13 @@ const Profile = () => {
           )}
           
           <div className="flex-row gap-2 w-full" style={{ marginTop: 10, width: '100%', padding: '0 20px' }}>
-            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ flex: 1, padding: '8px 12px', borderRadius: 20 }} onClick={handleShare}>
-              <Share2 size={18} /> {t('exportPushCard') || 'Export'}
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ flex: 1, padding: '8px 12px', borderRadius: 20 }} onClick={handleSaveToGallery}>
+              <Download size={18} /> {t('save') || 'Save'}
             </button>
-            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ flex: 1, padding: '8px 12px', borderRadius: 20, backgroundColor: 'transparent', border: '1px solid var(--tg-theme-button-color)', color: 'var(--tg-theme-button-color)' }} onClick={() => navigate(`/edit/${id}`)}>
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ width: 'auto', padding: '8px 12px', borderRadius: 20, backgroundColor: 'transparent', border: '1px solid var(--tg-theme-button-color)', color: 'var(--tg-theme-button-color)' }} onClick={handleShare}>
+              <Share2 size={18} />
+            </button>
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ width: 'auto', padding: '8px 12px', borderRadius: 20, backgroundColor: 'transparent', border: '1px solid var(--tg-theme-button-color)', color: 'var(--tg-theme-button-color)' }} onClick={() => navigate(`/edit/${id}`)}>
               {t('edit') || 'Edit'}
             </button>
             <button className="tg-btn flex-row items-center justify-center gap-1" style={{ width: 'auto', padding: '8px 12px', borderRadius: 20, backgroundColor: 'var(--tg-theme-secondary-bg-color)', color: 'var(--tg-theme-text-color)' }} onClick={() => setShowMore(!showMore)}>

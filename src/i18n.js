@@ -47,7 +47,8 @@ const resources = {
       "noExchanges": "No exchange UIDs added.",
       "invalidAddress": "Invalid address format for selected network.",
       "about": "About",
-      "developerInfo": "Developer Info"
+      "developerInfo": "Developer Info",
+      "save": "Save"
     }
   },
   zh: {
@@ -95,7 +96,8 @@ const resources = {
       "noExchanges": "暂无交易所 UID。",
       "invalidAddress": "所选网络的地址格式不正确。",
       "about": "关于",
-      "developerInfo": "开发者信息"
+      "developerInfo": "开发者信息",
+      "save": "保存"
     }
   }
 };
