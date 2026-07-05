@@ -98,7 +98,15 @@ const Profile = () => {
       const dataUrl = await generatePushCard(contact);
       
       if (Capacitor.isNativePlatform()) {
-        await Media.savePhoto({ path: dataUrl });
+        const base64Data = dataUrl.split(',')[1];
+        const fileName = `PushCard_Temp_${Date.now()}.jpg`;
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Cache
+        });
+        
+        await Media.savePhoto({ path: savedFile.uri });
         alert(t('save') + ' OK!');
       } else {
         const link = document.createElement('a');
@@ -108,7 +116,7 @@ const Profile = () => {
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to save PushCard');
+      alert('Failed to save PushCard: ' + e.message);
     }
   };
 

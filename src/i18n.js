@@ -39,8 +39,7 @@ const resources = {
       "setupProfile": "Setup Your Profile",
       "setupProfileDesc": "Create your own crypto address book entry to easily share with others via PushCard.",
       "createProfile": "Create Profile",
-      "socialLinks": "Social Media Links",
-      "addSocial": "Add Social Link",
+      "socialLinks": "Social Links",
       "noSocials": "No social media added.",
       "exchanges": "Exchange Direct Payment",
       "addExchange": "Add Exchange UID",
@@ -48,7 +47,7 @@ const resources = {
       "invalidAddress": "Invalid address format for selected network.",
       "about": "About",
       "developerInfo": "Developer Info",
-      "save": "Save"
+      "save": "Generate & Save PushCard"
     }
   },
   zh: {
@@ -76,7 +75,7 @@ const resources = {
       "selectImage": "选择图片",
       "processing": "处理中...",
       "scanHint": "从相册上传 PushCard 图片。\\我们将自动提取联系人信息和头像。",
-      "exportPushCard": "导出 PushCard",
+      "exportPushCard": "分享PushCard",
       "noAddresses": "暂无地址",
       "edit": "编辑",
       "deleteConfirm": "确认删除此联系人？",
@@ -87,9 +86,8 @@ const resources = {
       "myProfile": "我的主页",
       "setupProfile": "设置您的主页",
       "setupProfileDesc": "创建您专属的加密名片，通过 PushCard 与他人轻松分享。",
-      "createProfile": "创建主页",
-      "socialLinks": "社交媒体链接",
-      "addSocial": "添加社交链接",
+      "createProfile": "创建名片",
+      "socialLinks": "社交链接",
       "noSocials": "暂无社交媒体。",
       "exchanges": "交易所直付方式",
       "addExchange": "添加交易所 UID",
@@ -97,7 +95,7 @@ const resources = {
       "invalidAddress": "所选网络的地址格式不正确。",
       "about": "关于",
       "developerInfo": "开发者信息",
-      "save": "保存"
+      "save": "生成并存储PushCard"
     }
   }
 };
