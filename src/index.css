@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --tg-theme-bg-color: #ffffff;
+  --tg-theme-text-color: #000000;
+  --tg-theme-hint-color: #999999;
+  --tg-theme-link-color: #2481cc;
+  --tg-theme-button-color: #3390ec;
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-secondary-bg-color: #f4f4f5;
+  --tg-theme-header-bg-color: #ffffff;
+  --tg-theme-destructive-text-color: #ff3b30;
+  
+  --tg-border-color: #e5e5ea;
+  --tg-glass-bg: rgba(255, 255, 255, 0.7);
+  --tg-glass-border: rgba(255, 255, 255, 0.5);
+
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --border-radius: 12px;
+  --header-height: 56px;
+  --bottom-nav-height: 60px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tg-theme-bg-color: #1c1c1d;
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-hint-color: #aaaaaa;
+    --tg-theme-link-color: #ff9800; /* Orange */
+    --tg-theme-button-color: #ff9800; /* Orange */
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: #000000;
+    --tg-theme-header-bg-color: #1c1c1d;
+    --tg-theme-destructive-text-color: #ff453a;
+    
+    --tg-border-color: #38383a;
+    --tg-glass-bg: rgba(28, 28, 29, 0.95);
+    --tg-glass-border: rgba(255, 255, 255, 0.1);
+  }
+
+  .icon-invert {
+    filter: invert(1);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-text-color);
+  overscroll-behavior-y: none; /* Prevent bounce on mobile */
+  line-height: 1.5;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+/* Layout Utilities */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  position: relative;
+  background-color: var(--tg-theme-secondary-bg-color);
+}
+
+.content-area {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: calc(var(--bottom-nav-height) + 16px); /* space for nav */
+}
+
+/* Glassmorphism Header */
+.app-header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background-color: var(--tg-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--tg-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Solid Bottom Nav */
+.bottom-nav {
+  height: var(--bottom-nav-height);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--tg-theme-header-bg-color);
+  border-top: 1px solid var(--tg-border-color);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--tg-theme-hint-color);
+  text-decoration: none;
+  font-size: 12px;
+  flex: 1;
+  height: 100%;
+  transition: color 0.2s ease;
+}
+
+.nav-item.active {
+  color: var(--tg-theme-link-color);
+}
+
+.nav-item svg {
+  margin-bottom: 4px;
+}
+
+/* Cards & Lists */
+.tg-card {
+  background-color: var(--tg-theme-bg-color);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.list-group {
+  background-color: var(--tg-theme-bg-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--tg-border-color);
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.list-item:active {
+  background-color: var(--tg-theme-secondary-bg-color);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* Buttons */
+.tg-btn {
+  background-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, opacity 0.2s;
+  width: 100%;
+}
+
+.tg-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.tg-btn-secondary {
+  background-color: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-link-color);
+}
+
+/* Inputs */
+.tg-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--tg-theme-secondary-bg-color);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--tg-theme-text-color);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.tg-input:focus {
+  background-color: var(--tg-theme-bg-color);
+  border-color: var(--tg-theme-button-color);
+}
+
+.tg-input::placeholder {
+  color: var(--tg-theme-hint-color);
+}
+
+/* Utilities */
+.flex-row { display: flex; flex-direction: row; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.text-hint { color: var(--tg-theme-hint-color); font-size: 14px; }
+.text-bold { font-weight: 600; }
+
+/* Avatar */
+.avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--tg-theme-secondary-bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--tg-theme-hint-color);
+  overflow: hidden;
+}
+
+.icon-invert {
+  transition: filter 0.2s ease;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.page-transition {
+  animation: slideIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}

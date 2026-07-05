@@ -1,0 +1,188 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useContacts } from '../hooks/useContacts';
+import NetworkLogo from '../components/NetworkLogo';
+import { Copy, Check, Share2, MoreHorizontal, ExternalLink, Settings } from 'lucide-react';
+import { generatePushCard } from '../utils/pushCardEngine';
+import { useTranslation } from 'react-i18next';
+
+// Utility to get the right icon for social links
+const getSocialIcon = (url) => {
+  const lowerUrl = url.toLowerCase();
+  if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram')) {
+    return <img src="/src/assets/logos/telegram.svg" alt="Telegram" style={{ width: 24, height: 24 }} />;
+  }
+  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) {
+    return <img src="/src/assets/logos/x.svg" alt="X" className="icon-invert" style={{ width: 24, height: 24 }} />;
+  }
+  if (lowerUrl.includes('discord')) {
+    return <img src="/src/assets/logos/discord.svg" alt="Discord" style={{ width: 24, height: 24 }} />;
+  }
+  if (lowerUrl.includes('element')) {
+    return <img src="/src/assets/logos/element.svg" alt="Element" style={{ width: 24, height: 24 }} />;
+  }
+  return <ExternalLink size={24} color="var(--tg-theme-hint-color)" />;
+};
+
+const Profile = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { contacts } = useContacts();
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [showMore, setShowMore] = useState(false);
+  
+  const id = 'my-profile';
+  const contact = contacts.find(c => c.id === id);
+
+  if (!contact) {
+    return (
+      <div className="page-transition flex-col items-center justify-center" style={{height: '100vh', padding: 20}}>
+        <Settings size={64} color="var(--tg-theme-hint-color)" style={{marginBottom: 20}} />
+        <h2 style={{margin: 0, textAlign: 'center'}}>{t('setupProfile')}</h2>
+        <p className="text-hint text-center" style={{marginBottom: 30}}>{t('setupProfileDesc')}</p>
+        <button className="tg-btn" style={{width: 200}} onClick={() => navigate(`/edit/${id}`)}>{t('createProfile')}</button>
+      </div>
+    );
+  }
+
+  const handleCopy = (text, index) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const handleShare = async () => {
+    try {
+      const dataUrl = await generatePushCard(contact);
+      
+      const link = document.createElement('a');
+      link.download = `My_PushCard_${contact.name}.jpg`;
+      link.href = dataUrl;
+      link.click();
+    } catch (e) {
+      console.error(e);
+      alert('Failed to generate PushCard');
+    }
+  };
+
+  return (
+    <div className="page-transition">
+      <header className="app-header">
+        <span className="app-header-title">{t('myProfile')}</span>
+      </header>
+
+      <div className="content-area pb-10">
+        {/* Profile Header */}
+        <div className="flex-col items-center gap-3" style={{ margin: '20px 0 30px' }}>
+          {contact.avatar ? (
+            <img src={contact.avatar} alt="Avatar" className="avatar" style={{ width: 100, height: 100 }} />
+          ) : (
+            <div className="avatar" style={{ width: 100, height: 100, fontSize: 40 }}>
+              {contact.name.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <h2 style={{ fontSize: 24, margin: 0, textAlign: 'center' }}>{contact.name}</h2>
+          {contact.bio && (
+            <p className="text-hint" style={{ 
+              whiteSpace: 'pre-wrap', 
+              display: '-webkit-box', 
+              WebkitLineClamp: 8, 
+              WebkitBoxOrient: 'vertical', 
+              overflow: 'hidden',
+              textAlign: 'center',
+              padding: '0 20px'
+            }}>
+              {contact.bio}
+            </p>
+          )}
+          
+          <div className="flex-row gap-2 w-full" style={{ marginTop: 10, width: '100%', padding: '0 20px' }}>
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ flex: 1, padding: '8px 12px', borderRadius: 20 }} onClick={handleShare}>
+              <Share2 size={18} /> {t('exportPushCard') || 'Export'}
+            </button>
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ flex: 1, padding: '8px 12px', borderRadius: 20, backgroundColor: 'transparent', border: '1px solid var(--tg-theme-button-color)', color: 'var(--tg-theme-button-color)' }} onClick={() => navigate(`/edit/${id}`)}>
+              {t('edit') || 'Edit'}
+            </button>
+            <button className="tg-btn flex-row items-center justify-center gap-1" style={{ width: 'auto', padding: '8px 12px', borderRadius: 20, backgroundColor: 'var(--tg-theme-secondary-bg-color)', color: 'var(--tg-theme-text-color)' }} onClick={() => setShowMore(!showMore)}>
+              <MoreHorizontal size={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* More Info Section */}
+        {showMore && (
+          <div className="tg-card" style={{ marginBottom: 20, animation: 'fadeIn 0.2s ease-in-out' }}>
+            <h3 style={{ fontSize: 14, color: 'var(--tg-theme-hint-color)', marginBottom: 8 }}>{t('socialLinks')}</h3>
+            {contact.socials && contact.socials.length > 0 ? (
+              <div className="flex-col gap-2 mb-4">
+                {contact.socials.map((social, idx) => (
+                  <a key={idx} href={social.startsWith('http') ? social : `https://${social}`} target="_blank" rel="noreferrer" className="flex-row items-center gap-3" style={{ padding: '8px 0', textDecoration: 'none', color: 'var(--tg-theme-text-color)' }}>
+                    {getSocialIcon(social)}
+                    <span style={{ fontSize: 14, wordBreak: 'break-all' }}>{social}</span>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="text-hint" style={{ fontSize: 13, marginBottom: 16 }}>{t('noSocials')}</p>
+            )}
+
+            <h3 style={{ fontSize: 14, color: 'var(--tg-theme-hint-color)', marginBottom: 8 }}>{t('exchanges')}</h3>
+            {contact.exchanges && contact.exchanges.length > 0 ? (
+              <div className="flex-col gap-2">
+                {contact.exchanges.map((exch, idx) => (
+                  <div key={idx} className="flex-row items-center gap-3" style={{ padding: '8px 0' }} onClick={() => handleCopy(exch.uid, `exch-${idx}`)}>
+                    {exch.platform === 'Binance' ? (
+                      <img src="/src/assets/logos/binance.png" alt="Binance" style={{ width: 24, height: 24 }} />
+                    ) : (
+                      <img src="/src/assets/logos/bitget.png" alt="Bitget" style={{ width: 24, height: 24 }} />
+                    )}
+                    <div className="flex-col flex-1" style={{ overflow: 'hidden' }}>
+                      <span className="text-bold">{exch.platform}</span>
+                      <span className="text-hint" style={{ fontSize: 13 }}>UID: {exch.uid}</span>
+                    </div>
+                    <div>
+                      {copiedIndex === `exch-${idx}` ? (
+                        <Check size={20} color="#14F195" />
+                      ) : (
+                        <Copy size={20} color="var(--tg-theme-hint-color)" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-hint" style={{ fontSize: 13 }}>{t('noExchanges')}</p>
+            )}
+          </div>
+        )}
+
+        {/* Addresses */}
+        <h3 style={{ fontSize: 14, color: 'var(--tg-theme-hint-color)', marginLeft: 8, marginBottom: 8 }}>{t('addresses')}</h3>
+        <div className="list-group">
+          {contact.addresses && contact.addresses.length > 0 ? (
+            contact.addresses.map((addr, idx) => (
+              <div key={idx} className="list-item gap-3" onClick={() => handleCopy(addr.address, `addr-${idx}`)}>
+                <NetworkLogo network={addr.network} />
+                <div className="flex-col flex-1" style={{ overflow: 'hidden' }}>
+                  <span className="text-bold">{addr.network}</span>
+                  <span className="text-hint" style={{ fontSize: 13, wordBreak: 'break-all' }}>{addr.address}</span>
+                </div>
+                <div>
+                  {copiedIndex === `addr-${idx}` ? (
+                    <Check size={20} color="#14F195" />
+                  ) : (
+                    <Copy size={20} color="var(--tg-theme-hint-color)" />
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="list-item justify-center"><p className="text-hint">{t('noAddresses')}</p></div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
