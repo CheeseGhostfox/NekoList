@@ -104,7 +104,28 @@ const ContactDetail = () => {
           directory: Directory.Cache
         });
         
-        await Media.savePhoto({ path: savedFile.uri });
+        let albumId;
+        try {
+          let albumsResp = await Media.getAlbums();
+          let targetAlbum = albumsResp.albums.find(a => a.name === 'NekoList' || a.name === 'Pictures');
+          if (!targetAlbum) {
+            await Media.createAlbum({ name: 'NekoList' });
+            albumsResp = await Media.getAlbums();
+            targetAlbum = albumsResp.albums.find(a => a.name === 'NekoList');
+          }
+          if (targetAlbum) {
+            albumId = targetAlbum.identifier;
+          } else if (albumsResp.albums.length > 0) {
+            albumId = albumsResp.albums[0].identifier;
+          }
+        } catch (err) {
+          console.warn('Failed to get or create album:', err);
+        }
+
+        await Media.savePhoto({ 
+          path: savedFile.uri,
+          albumIdentifier: albumId
+        });
         alert(t('save') + ' OK!');
       } else {
         const link = document.createElement('a');
